@@ -14,6 +14,7 @@ namespace LibrarySystem.Domain.Interfaces
         Task AgregarAsync(Libro libro);
         Task ActualizarAsync(Libro libro);
         Task EliminarAsync(int id);
+        Task<IEnumerable<Libro>> ObtenerPorTituloAsync(string titulo);
 
     }
 }

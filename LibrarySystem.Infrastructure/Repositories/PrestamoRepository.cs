@@ -23,7 +23,7 @@ namespace LibrarySystem.Infrastructure.Repositories
         {
             await _context.Prestamos.AddAsync(prestamo);
 
-            foreach (var libro in libros) 
+            foreach (var libro in libros)  
             {
                 if (libro.Stock <= 0) throw new Exception($"No hay stock para el libro : {libro.Titulo}");
 
@@ -50,6 +50,30 @@ namespace LibrarySystem.Infrastructure.Repositories
                 .Where(p => p.Usuario != null && p.Usuario.Dni == dni).ToListAsync();
         }
 
+        public async Task RegistrarEntregaAsync(int id)
+        {
+            var prestamo = await _context.Prestamos.Include(p => p.Detalles).FirstOrDefaultAsync(d => d.Id == id);
+            if (prestamo != null && !prestamo.FechaDevolucionReal.HasValue)
+            {
+                prestamo.FechaDevolucionReal = DateTime.UtcNow;
 
+                foreach(var detalle in prestamo.Detalles)
+                {
+                    var libro = await _context.Libros.FindAsync(detalle.LibroId);
+
+                    if (libro != null) 
+                    {
+                        libro.Stock += 1;
+                    }
+                }
+                
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<Prestamo?> ObtenerPorId(int id)
+        {
+            return await _context.Prestamos.Include(p => p.Detalles).FirstOrDefaultAsync(p => p.Id ==  id);
+        }
     }
 }

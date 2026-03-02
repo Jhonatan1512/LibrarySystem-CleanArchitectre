@@ -14,5 +14,7 @@ namespace LibrarySystem.Domain.Interfaces
         Task CrearUsuarioAsync(Usuario usuario);
         Task ActualizarUsuarioAsync(Usuario usuario);
         Task EliminarUsuario(int id);
+        Task<Usuario?> ObtenerPorDniAsync(string dni);
+
     }
 }

@@ -12,6 +12,17 @@ namespace LibrarySystem.Application.DTOs
         public string NombreUsuario { get; set; } = string.Empty;
         public DateTime FechaPrestamo { get; set; }
         public DateTime FechaDevolucion { get; set; }
-        public List<string> LibrosPrestados { get; set; } = new List<string>();
+        public DateTime? FechaDevolucionReal {  get; set; }
+        public List<string> LibrosPrestados { get; set; } = new List<string>(); 
+         
+        public string Estado
+        {
+            get
+            {
+                if (FechaDevolucionReal.HasValue) return "Entregado";
+                if (DateTime.Now > FechaDevolucion) return "Atrasado";
+                return "Pendiente";
+            }
+        }
     }
 }

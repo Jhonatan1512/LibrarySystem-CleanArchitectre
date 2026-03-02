@@ -12,5 +12,8 @@ namespace LibrarySystem.Domain.Interfaces
         Task<Prestamo> RegistrarPrestamoAsync(Prestamo prestamo, List<Libro> libros);
         Task<IEnumerable<Prestamo>> ObtenerTodosAsync();
         Task<IEnumerable<Prestamo>> ObtenerPorDniAsync(string dni);
+        Task RegistrarEntregaAsync(int id);
+        Task<Prestamo?> ObtenerPorId(int id);
     }
 }
+ 

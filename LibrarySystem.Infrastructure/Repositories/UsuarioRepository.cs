@@ -48,6 +48,11 @@ namespace LibrarySystem.Infrastructure.Repositories
                 _context.Usuarios.Remove(usuarioExiste);
                 await _context.SaveChangesAsync();
             }
-        }        
+        }
+
+        public async Task<Usuario?> ObtenerPorDniAsync(string dni)
+        {
+            return await _context.Usuarios.FirstOrDefaultAsync(u => u.Dni == dni);
+        }
     }
 }

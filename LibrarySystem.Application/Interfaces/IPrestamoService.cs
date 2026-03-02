@@ -1,4 +1,5 @@
 ﻿using LibrarySystem.Application.DTOs;
+using LibrarySystem.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,8 @@ namespace LibrarySystem.Application.Interfaces
         Task<string> ProcesarPrestamo(PrestamoDto dto);
         Task<IEnumerable<GetPrestamoDto>> ObtenerTodosAsync();
         Task<IEnumerable<GetPrestamoDto>> ObtenerPorDniAsync(string dni);
+        Task RegistrarEntregaAsync(int id);
+        Task<Prestamo?> ObtenerPorIdAsync(int id);
     }
 }
+ 

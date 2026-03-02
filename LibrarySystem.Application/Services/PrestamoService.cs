@@ -20,7 +20,7 @@ namespace LibrarySystem.Application.Services
         {
             _prestamoServiceRep = prestamoRepo;
             _libroRepository = libroRepository;
-
+             
         }
 
         public async Task<string> ProcesarPrestamo(PrestamoDto dto)
@@ -33,7 +33,7 @@ namespace LibrarySystem.Application.Services
             foreach (var id in dto.LibrosIds)
             {
                 var libros = await _libroRepository.ObtenerPorIdAsync(id);
-                if (libros == null) return $"El libro {libros.Titulo} no existe.";
+                if (libros == null) return $"El libro {id} no existe.";
                 if (libros.Stock <= 0) return $"El libro {libros.Titulo} no tiene stock";
 
                 lisbrosPrestar.Add(libros);
@@ -65,6 +65,7 @@ namespace LibrarySystem.Application.Services
                 NombreUsuario = p.Usuario?.Nombre ?? "Dsconocido",
                 FechaPrestamo = p.FechaPrestamo,
                 FechaDevolucion = p.FechaDevolucion,
+                FechaDevolucionReal = p.FechaDevolucionReal,
                 LibrosPrestados = p.Detalles.Select(d => d.Libro?.Titulo ?? "Sin titulo").ToList(),
             });
         }
@@ -83,5 +84,15 @@ namespace LibrarySystem.Application.Services
             });
         }
 
+        public async Task RegistrarEntregaAsync(int id)
+        {
+             await _prestamoServiceRep.RegistrarEntregaAsync(id);
+        }
+
+        public async Task<Prestamo?> ObtenerPorIdAsync(int id)
+        {
+            return await _prestamoServiceRep.ObtenerPorId(id);
+                        
+        }
     }
 }

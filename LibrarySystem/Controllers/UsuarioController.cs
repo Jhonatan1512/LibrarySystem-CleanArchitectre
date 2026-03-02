@@ -30,13 +30,31 @@ namespace LibrarySystem.Api.Controllers
                 Dni = u.Dni,
             });
             return Ok(usuariosDto);
-        }
+        } 
 
         //GET :api/usuario/id
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<Usuario>>> ObtenerPorId(int id)
         {
             var usuario = await _usuarioRepository.ObtenerPorIdAsync(id);
+
+            if (usuario == null) return NotFound("Usuario no encontrado");
+
+            var usuarioDto = new UsuarioDto
+            {
+                Id = usuario.Id,
+                Nombre = usuario.Nombre,
+                Dni = usuario.Dni,
+            };
+
+            return Ok(usuarioDto);
+        }
+
+        //GET :api/usuario/dni
+        [HttpGet("dni/{dni}")]
+        public async Task<ActionResult<IEnumerable<Usuario>>> ObtenerPorDni(string dni) 
+        {
+            var usuario = await _usuarioRepository.ObtenerPorDniAsync(dni);
 
             if (usuario == null) return NotFound("Usuario no encontrado");
 

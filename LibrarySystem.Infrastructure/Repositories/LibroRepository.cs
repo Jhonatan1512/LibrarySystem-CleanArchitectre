@@ -50,5 +50,10 @@ namespace LibrarySystem.Infrastructure.Repositories
         {
             return await _context.Libros.Include(l => l.Categoria).FirstOrDefaultAsync(l => l.Id == id);
         }
+
+        public async Task<IEnumerable<Libro>> ObtenerPorTituloAsync(string titulo)
+        {
+            return await _context.Libros.Where(l => l.Titulo.ToLower().Contains(titulo.ToLower())).ToListAsync();
+        }
     }
 }

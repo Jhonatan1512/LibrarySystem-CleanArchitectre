@@ -11,10 +11,11 @@ namespace LibrarySystem.Domain.Entities
         public int Id { get; set; }
         public DateTime FechaPrestamo { get; set; } = DateTime.UtcNow;
         public DateTime FechaDevolucion { get; set; }
+        public DateTime? FechaDevolucionReal { get; set; }
 
         public int UsuarioId { get; set; }
         public Usuario? Usuario { get; set; } 
 
-        public ICollection<DetallePrestamo> Detalles { get; set; } = new List<DetallePrestamo>();
+        public ICollection<DetallePrestamo> Detalles { get; set; } = new List<DetallePrestamo>(); 
     }
 }

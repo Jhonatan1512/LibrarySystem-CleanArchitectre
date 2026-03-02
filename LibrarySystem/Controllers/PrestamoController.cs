@@ -1,6 +1,7 @@
 ﻿using LibrarySystem.Application.DTOs;
 using LibrarySystem.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibrarySystem.Api.Controllers
 {
@@ -8,7 +9,7 @@ namespace LibrarySystem.Api.Controllers
     [ApiController]
     public class PrestamoController : ControllerBase
     {
-        
+
         private readonly IPrestamoService _prestamoService;
 
         public PrestamoController(IPrestamoService prestamoService)
@@ -24,11 +25,11 @@ namespace LibrarySystem.Api.Controllers
 
             if (resultado != "Ok")
             {
-                return BadRequest(new {mensaje = resultado});
+                return BadRequest(new { mensaje = resultado });
 
             }
 
-            return StatusCode(201, new { mensaje = "Prstamo registrado" });
+            return StatusCode(201, new { mensaje = "Prestamo registrado" });
         }
 
         //GET :api/prestamo
@@ -45,8 +46,39 @@ namespace LibrarySystem.Api.Controllers
         {
             var prestamo = await _prestamoService.ObtenerPorDniAsync(dni);
 
-            if (!prestamo.Any()) return NotFound(new {mensaje = $"No se encontro prestamos para el usuario con DNI: {dni}"});
+            if (!prestamo.Any()) return NotFound(new { mensaje = $"No se encontro prestamos para el usuario con DNI: {dni}" });
             return Ok(prestamo);
+        }
+
+        //GET :api/id
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<PrestamoDto>> ObtenerPorId(int id)
+        {
+            var prestamo = await _prestamoService.ObtenerPorIdAsync(id);
+
+            if (prestamo == null) return NotFound(new { mensaje = "Prestamo no encontrado" });
+
+            var presatmoDto = new PrestamoDto
+            {
+                Id = prestamo.Id,                
+            };
+            return Ok(presatmoDto);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Entregar(int id)
+        {
+            var prestamoExiste = await _prestamoService.ObtenerPorIdAsync(id);
+            if (prestamoExiste == null) return NotFound("El prestamo no existe");
+
+            //Al asignar la fecha actual, el estado automáticamente pasará a "Entregado"
+            await _prestamoService.RegistrarEntregaAsync(id);
+            //prestamoExiste.FechaDevolucionReal = DateTime.UtcNow;
+
+            return Ok(new { 
+                mensaje = "Entrega registrada con éxito", 
+                fecha = prestamoExiste.FechaDevolucionReal 
+            });
         }
     }
 }

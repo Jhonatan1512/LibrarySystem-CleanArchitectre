@@ -61,9 +61,29 @@ namespace LibrarySystem.Api.Controllers
             return Ok(libroDto);
         }
 
+        //GET :api/libros/titulo
+        [HttpGet("titulo/{titulo}")]
+        public async Task<ActionResult<IEnumerable<LibroDto>>> ObtenerPorTitulo(string titulo)
+        {
+            var libro = await _libroRepository.ObtenerPorTituloAsync(titulo);
+
+            if (libro == null || !libro.Any()) return Ok(new List<LibroDto>());
+
+            var libroDto = libro.Select(l => new LibroDto
+            {
+                Id = l.Id,
+                Titulo = l.Titulo,
+                Autor = l.Autor,
+                Stock = l.Stock,
+                CategoriaId = l.CategoriaId,
+                NombreCategoria = l.Categoria?.Nombre ?? "Sin Categoría"
+            });
+            return Ok(libroDto);
+        }
+
         //POST :api/libros
         [HttpPost]
-        public async Task<ActionResult> CrearLibro([FromBody] LibroDto libroDto)
+        public async Task<ActionResult> CrearLibro([FromBody] LibroDto libroDto) 
         {
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
