@@ -17,7 +17,7 @@ namespace LibrarySystem.Api.Controllers
             _prestamoService = prestamoService;
         }
 
-        //POST :api/prestamo
+        //POST :api/prestamo 
         [HttpPost]
         public async Task<IActionResult> CrearPrestamo([FromBody] PrestamoDto dto)
         {

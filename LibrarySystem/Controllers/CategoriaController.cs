@@ -11,7 +11,7 @@ namespace LibrarySystem.Api.Controllers
     public class CategoriaController : ControllerBase
     {
         private readonly ICategoriaRepository _categoriaRepository;
-
+        
         public CategoriaController(ICategoriaRepository categoriaRepository) 
         {
             _categoriaRepository = categoriaRepository;

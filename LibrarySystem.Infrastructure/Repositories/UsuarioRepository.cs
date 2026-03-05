@@ -49,7 +49,7 @@ namespace LibrarySystem.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-
+         
         public async Task<Usuario?> ObtenerPorDniAsync(string dni)
         {
             return await _context.Usuarios.FirstOrDefaultAsync(u => u.Dni == dni);
